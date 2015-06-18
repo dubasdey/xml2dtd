@@ -1,0 +1,7 @@
+<!ELEMENT content ( onenode, twonode+ ) >
+<!ELEMENT onechild EMPTY >
+<!ELEMENT onenode ( onechild ) >
+<!ATTLIST onenode oneattr NMTOKEN #REQUIRED >
+<!ELEMENT twochilds EMPTY >
+<!ATTLIST twochilds otherattr NMTOKEN #REQUIRED >
+<!ELEMENT twonode ( onechild | twochilds )* >

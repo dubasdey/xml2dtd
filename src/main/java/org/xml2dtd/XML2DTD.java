@@ -20,8 +20,8 @@ package org.xml2dtd;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -89,14 +89,28 @@ public class XML2DTD extends DefaultHandler{
      * @throws IOException 						Signals that an I/O exception has occurred.
      */
     public String run(String s) throws SAXException, ParserConfigurationException, IOException  {
+    	return run(new FileInputStream(new File(s)));
+    }
+    
+    /**
+     * Run parser
+     * 
+     * @param inputStream InputStream to be parsed
+     * 
+     * @return DTD document (as String)
+     * 
+     * @throws SAXException						SAX Parser exception
+     * @throws ParserConfigurationException 	the parser configuration exception
+     * @throws IOException 						Signals that an I/O exception has occurred.
+     */    
+    public String run(InputStream inputStream) throws IOException, SAXException, ParserConfigurationException{
     	resultBuffer = new StringBuffer();
     	
     	// Read XML and prepare content as Objects
-        InputSource inputsource = new InputSource(new FileInputStream(new File(s)));
+        InputSource inputsource = new InputSource(inputStream);
         XMLReader xmlreader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
         xmlreader.setContentHandler(this);
         xmlreader.parse(inputsource);
-        
         
         printDTD();
         return resultBuffer.toString();
@@ -107,19 +121,17 @@ public class XML2DTD extends DefaultHandler{
      * Prints the TDT content.
      */
     private void printDTD() {
-    	
     	for(Map.Entry<String, ElementDetails> entry: elementList.entrySet()){
-    		resultBuffer.append("\n");
+    		
 
             ElementDetails elementdetails = entry.getValue();
             Map<String,ChildDetails> elementDetailsChildrens = elementdetails.getChildren();
             Set<String> elementDetailsChildrensKeys = elementDetailsChildrens.keySet();
             
             if(elementDetailsChildrensKeys.size() == 0 && !elementdetails.isCharacterContent() ) {
-            	resultBuffer.append("<!ELEMENT ").append(entry.getKey()).append(" EMPTY >");
-                
+            	resultBuffer.append("<!ELEMENT ").append(entry.getKey()).append(" EMPTY >\n");
             }else if(elementDetailsChildrensKeys.size() == 0 && elementdetails.isCharacterContent()) {
-            	resultBuffer.append("<!ELEMENT ").append(entry.getKey()).append(" ( #PCDATA ) >");
+            	resultBuffer.append("<!ELEMENT ").append(entry.getKey()).append(" ( #PCDATA ) >\n");
                 
             }else if(elementDetailsChildrensKeys.size() > 0 && !elementdetails.isCharacterContent()) {
             	resultBuffer.append("<!ELEMENT ").append(entry.getKey()).append(" ( ");
@@ -143,7 +155,7 @@ public class XML2DTD extends DefaultHandler{
                         }
                         
                 	}
-                	resultBuffer.append(" ) >");
+                	resultBuffer.append(" ) >\n");
                 	
                 } else {
                     for(Iterator<String> iterator1 = elementDetailsChildrensKeys.iterator(); iterator1.hasNext();) {
@@ -161,7 +173,7 @@ public class XML2DTD extends DefaultHandler{
             	resultBuffer.append("\n");
             	resultBuffer.append("<!ELEMENT ").append( entry.getKey()).append(" ( #PCDATA");
                 for(Iterator<String> iterator2 = elementDetailsChildrensKeys.iterator(); iterator2.hasNext(); resultBuffer.append(" | " + iterator2.next())) {}
-                resultBuffer.append(" )* >");
+                resultBuffer.append(" )* >\n");
             }
 
             boolean flag = false;

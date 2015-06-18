@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+	<onenode oneattr="5">
+		<onechild/>
+	</onenode>
+	
+	<twonode>
+		<onechild/>
+	</twonode>
+	<twonode>
+		<twochilds otherattr="ab"/>
+		<twochilds otherattr="ab"/>
+	</twonode>
+</content>
