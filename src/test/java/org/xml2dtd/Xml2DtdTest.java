@@ -16,8 +16,14 @@ public class Xml2DtdTest {
 	public void testConvert() throws IOException, SAXException, ParserConfigurationException{
 		XML2DTD xml2dtd = new XML2DTD();
 		InputStream xml = getClass().getResourceAsStream("basic.xml");
-		String dtd =TestUtils.convertStreamToString(getClass().getResourceAsStream("basic.dtd"));
-		String dtdGenerated = xml2dtd.run(xml);
+		String dtd = TestUtils.convertStreamToString(getClass().getResourceAsStream("basic.dtd"));
+		dtd = dtd.replaceAll("\r\n", "\n");
+		String dtdGenerated = xml2dtd.run(xml);	
+		System.out.println("-------------------------------------------------------------------------------");
+		System.out.println(dtd);
+		System.out.println("-------------------------------------------------------------------------------");
+		System.out.println(dtdGenerated);
+		System.out.println("-------------------------------------------------------------------------------");
 		assertEquals("Generated DTD not equals to template",dtd,dtdGenerated);
 	}
 }

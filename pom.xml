@@ -5,7 +5,7 @@
 	<artifactId>xml2dtd</artifactId>	
 	<packaging>jar</packaging>
     <version>0.3</version>
-    <name>XML 2 DTD</name>
+    <name>XML2DTD</name>
     <url>https://github.com/dubasdey/xml2dtd/</url>
     
 	<dependencies>
@@ -44,7 +44,35 @@
 					<parallel>methods</parallel>
 		          	<threadCount>10</threadCount>
 		        </configuration>
-      		</plugin>			
+      		</plugin>
+      		
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<finalName>${finalName}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
+					<archive>
+						<compress>true</compress>
+						<index>true</index>
+						<manifest>
+							<mainClass>org.xml2dtd.swing.XML2DTD</mainClass>
+						</manifest>
+					</archive>
+			        <descriptorRefs>
+			          <descriptorRef>jar-with-dependencies</descriptorRef>
+			        </descriptorRefs>					
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 	   </plugins>
    </build>
 
